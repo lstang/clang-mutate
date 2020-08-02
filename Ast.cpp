@@ -279,8 +279,8 @@ void Ast::update_range_offsets(CompilerInstance * ci)
 {
     SourceManager & sm = ci->getSourceManager();
     FileID mainFileID = sm.getMainFileID();
-    SourceRange sr = sm.getExpansionRange(m_range);
-    SourceRange nsr = sm.getExpansionRange(m_normalized_range);
+    SourceRange sr = (m_range);
+    SourceRange nsr =(m_normalized_range);
 
     std::pair<FileID, unsigned> decomp;
 

@@ -12,6 +12,7 @@
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/AST/AST.h"
+#include "clang/AST/Stmt.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Rewrite/Core/Rewriter.h"
@@ -130,8 +131,11 @@ class BuildTU
 
         AstRef ast = Ast::create(clang_obj, required);
 
-        ast->setInMacroExpansion(clang_obj->getLocStart().isMacroID() &&
-                                 clang_obj->getLocEnd().isMacroID());
+
+
+
+        ast->setInMacroExpansion(clang_obj->getBeginLoc().isMacroID() &&
+                                 clang_obj->getEndLoc().isMacroID());
 
         Renames renames(required.variables(),
                         required.functions());

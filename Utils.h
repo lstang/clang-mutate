@@ -123,17 +123,17 @@ bool contains_macro(T * clang_obj, clang::SourceManager & sm) {
     if (R.getBegin().isMacroID() && R.getEnd().isMacroID()) {
         clang::PresumedLoc xb =
             sm.getPresumedLoc(
-                sm.getExpansionRange(R.getBegin()).first);
+                sm.getExpansionRange(R.getBegin()).getBegin() );
         clang::PresumedLoc xe =
             sm.getPresumedLoc(
-                sm.getExpansionRange(R.getEnd()).second);
+                sm.getExpansionRange(R.getEnd()).getEnd());
 
         clang::PresumedLoc ixb =
             sm.getPresumedLoc(
-                sm.getImmediateExpansionRange(R.getBegin()).first);
+                sm.getImmediateExpansionRange(R.getBegin()).getBegin());
         clang::PresumedLoc ixe =
             sm.getPresumedLoc(
-                sm.getImmediateExpansionRange(R.getEnd()).second);
+                sm.getImmediateExpansionRange(R.getEnd()).getEnd());
 
         return (xb.isValid() && xe.isValid() &&
             ixb.isValid() && ixe.isValid() &&

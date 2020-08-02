@@ -70,7 +70,7 @@ bool Requirements::VisitDeclRefExpr(DeclRefExpr * expr)
     std::string name      = vdecl->getQualifiedNameAsString();
     IdentifierInfo * id   = vdecl->getIdentifier();
     bool isMacro = Utils::contains_macro(expr, ci->getSourceManager()) &&
-                   vdecl->getLocStart().isMacroID();
+                   vdecl->getBeginLoc().isMacroID();
 
     if (id != NULL && !ctx.is_bound(name) && !isMacro) {
         std::string header;
@@ -117,13 +117,13 @@ void Requirements::gatherMacro(Stmt * stmt)
         if (is_first == true)
             toplev_is_macro = true;
         Preprocessor & pp = ci->getPreprocessor();
-        StringRef name = pp.getImmediateMacroName(stmt->getLocStart());
+        StringRef name = pp.getImmediateMacroName(stmt->getEndLoc());
         MacroInfo * mi = pp.getMacroInfo(pp.getIdentifierInfo(name));
 
         if ( mi != NULL ){
             SourceLocation sb = sm.getSpellingLoc(
                                   sm.getImmediateExpansionRange(
-                                    stmt->getSourceRange().getBegin()).first);
+                                    stmt->getSourceRange().getBegin()).getBegin());
             SourceLocation mb = mi->getDefinitionLoc();
             std::string header;
 

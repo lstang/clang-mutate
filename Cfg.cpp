@@ -60,7 +60,7 @@ void GenerateCFG(TU &TU, CompilerInstance const &CI, ASTContext &Context)
         for (auto block : *cfg) {
             // Find the terminator (if the block ends with a control flow
             // statement), or the final statement in the block.
-            const Stmt *s = block->getTerminator();
+            const Stmt *s = block->getTerminator().getStmt();
             if (!s) {
                 llvm::Optional<CFGStmt> last = block->back().getAs<CFGStmt>();
                 if (last.hasValue())

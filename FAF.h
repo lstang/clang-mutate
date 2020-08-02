@@ -7,7 +7,7 @@
 // CompilerInstances are put into the global list TUs along with
 // their AstTables; clang_mutate is then the owner of these
 // instances.
-
+#include <memory>
 #include "TU.h"
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Frontend/PCHContainerOperations.h"
@@ -54,7 +54,7 @@ bool FAF::runInvocation(std::shared_ptr<clang::CompilerInvocation> Invocation,
     clang_mutate::tu_in_progress->source
         = sm.getBufferData(sm.getMainFileID()).str();
 
-    Files->clearStatCaches();
+    Files->clearStatCache();
     return Success;
 }
 
@@ -69,8 +69,9 @@ template <typename FactoryT>
                          clang::tooling::SourceFileCallbacks *Callbacks)
        : ConsumerFactory(ConsumerFactory), Callbacks(Callbacks) {}
  
-     clang::FrontendAction *create() override {
-       return new ConsumerFactoryAdaptor(ConsumerFactory, Callbacks);
+     std::unique_ptr< clang::FrontendAction> create() override {
+       return std::unique_ptr< clang::FrontendAction>(new ConsumerFactoryAdaptor(ConsumerFactory, Callbacks));
+       
      }
  
    private:
